@@ -1,7 +1,7 @@
 {
   "name": "@swappableqm/swapperctl",
   "description": "The command-line interface for Swapper, the easiest way to orchestrate Personal Proxmox IOMMU hosts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Dani <git@danny.works>",
   "bin": {
     "swapperctl": "./bin/run.js"
