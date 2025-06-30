@@ -52,13 +52,15 @@
     "dirname": "swapperctl",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-help"
     ],
     "topicSeparator": " ",
     "topics": {
       "active": {
         "description": "Manage the active QM"
+      },
+      "qm": {
+        "description": "Manage all QMs"
       }
     }
   },
