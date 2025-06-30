@@ -40,7 +40,7 @@
     "./dist",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/swapperctl/swapperctl",
+  "homepage": "https://github.com/daniwasonline/swapperctl",
   "keywords": [
     "oclif"
   ],
@@ -64,7 +64,7 @@
       }
     }
   },
-  "repository": "swapperctl/swapperctl",
+  "repository": "daniwasonline/swapperctl",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
