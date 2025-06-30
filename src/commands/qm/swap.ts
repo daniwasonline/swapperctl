@@ -54,7 +54,7 @@ export default class QMSwap extends ExtendedCommand<typeof QMSwap> {
     const overview = await swapper?.overview;
     const current = await this.commandTools.swapper?.active.overview;
 
-    const job = {};
+    const job = await swapper?.swap();
 
     if (overview?.data?.status === "running") {
       const err = {
@@ -65,8 +65,6 @@ export default class QMSwap extends ExtendedCommand<typeof QMSwap> {
       return this.error(cj(err));
     }
 
-    ;
-
     if (this.jsonEnabled()) return this.toSuccessJson(job);
 
     this.log(chalk.bold(`Overview: QM ${chalk.blue(`${swapper.id} (${swapper.friendlyName})`)}`));
@@ -76,7 +74,6 @@ export default class QMSwap extends ExtendedCommand<typeof QMSwap> {
       this.log(deviceStatusHelper(`Swap - Power off QM ${current?.data?.id} (${current?.data?.name})`, chalk.magenta("queued"), { isLast: false, level: 2 }));
     }
 
-    ;
     this.log(deviceStatusHelper("Swap - Device Sync", chalk.magenta("queued"), { isLast: false, level: 2 }));
     this.log(deviceStatusHelper(`Swap - Start QM ${swapper.id} (${swapper.friendlyName})`, chalk.magenta("queued"), { isLast: true, level: 2 }));
   }
