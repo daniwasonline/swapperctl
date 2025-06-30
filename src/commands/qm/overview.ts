@@ -2,7 +2,7 @@ import { Args } from '@oclif/core'
 import chalk from 'chalk';
 import cj from "color-json"
 
-import { ExtendedCommand } from '../../lib/oclif/s.js'
+import { ExtendedCommand } from '../../lib/oclif/base.js'
 import { deviceStatusHelper, generateSpacingPrefix } from '../../lib/oclif/helpers.js';
 import { SwapperMachineManager } from '../../lib/swapper.js';
 
