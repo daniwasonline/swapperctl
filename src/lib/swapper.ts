@@ -2,6 +2,14 @@ import ky from "ky";
 
 type ResultType<T extends boolean> = T extends true ? Record<string, any> : SwapperMachineManager[];
 
+const handleError = (err: any) => {
+  console.error(err);
+  return {
+    data: [],
+    success: false
+  };
+};
+
 export class SwapperClient {
   active: SwapperActiveManager;
   host: URL;
@@ -20,7 +28,7 @@ export class SwapperClient {
       headers: {
         "Authorization": `Bearer ${this.secret}`
       }
-    }).json();
+    }).json().catch(handleError);
 
     if (raw) return qms as ResultType<T>;
 
@@ -36,27 +44,33 @@ export class SwapperActiveManager {
   }
 
   get overview(): Promise<Record<string, any>> {
-    return ky.get(`${this.swapper.prefix}/api/v1/active`, {
+    const req = ky.get(`${this.swapper.prefix}/api/v1/active`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
-    }).json();
+    }).json().catch(handleError);
+
+    return req as Promise<Record<string, any>>;
   }
 
   async stop(): Promise<Record<string, any>> {
-    return ky.post(`${this.swapper.prefix}/api/v1/active/stop`, {
+    const req = ky.post(`${this.swapper.prefix}/api/v1/active/stop`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
     }).json();
+
+    return req as Promise<Record<string, any>>;
   };
 
   async syncDevices(): Promise<Record<string, any>> {
-    return ky.post(`${this.swapper.prefix}/api/v1/active/sync`, {
+    const req = ky.post(`${this.swapper.prefix}/api/v1/active/sync`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
     }).json();
+
+    return req as Promise<Record<string, any>>;
   };
 }
 
@@ -74,18 +88,22 @@ export class SwapperMachineManager {
   };
 
   get overview(): Promise<Record<string, any>> {
-    return ky.get(`${this.swapper.prefix}/api/v1/qm/${this.id}`, {
+    const req = ky.get(`${this.swapper.prefix}/api/v1/qm/${this.id}`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
     }).json();
+
+    return req as Promise<Record<string, any>>;
   };
 
   async swap(): Promise<Record<string, any>> {
-    return ky.post(`${this.swapper.prefix}/api/v1/qm/${this.id}/swap`, {
+    const req = ky.post(`${this.swapper.prefix}/api/v1/qm/${this.id}/swap`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
     }).json();
+
+    return req as Promise<Record<string, any>>;
   };
 }

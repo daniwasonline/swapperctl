@@ -58,8 +58,6 @@ export abstract class ExtendedCommand<T extends typeof Command> extends Command 
         throw new Error("Missing API URL (configure using process.env.SWAPPERCTL_API_URL or --api-url)");
       }
 
-      ;
-
       this.commandTools = {
         swapper: new SwapperClient({
           hostURL: this.flags["api-url"],

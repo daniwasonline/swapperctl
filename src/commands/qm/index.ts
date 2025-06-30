@@ -40,10 +40,7 @@ export default class QMList extends ExtendedCommand<typeof QMList> {
         error: "No QMs found",
         success: false
       }));
-      return;
     }
-
-    ;
 
 
     this.log(chalk.bold(`Overview: Swappable QMs`));
