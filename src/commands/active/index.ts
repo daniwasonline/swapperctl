@@ -33,12 +33,12 @@ export default class Active extends ExtendedCommand<typeof Active> {
     this.log(deviceStatusHelper("Memory", Number(swapper?.data?.memory) >= 1024 ? `${chalk.blue((swapper?.data?.memory / 1024).toFixed(2))} GB` : `${chalk.blue(swapper?.data?.memory)} MB`));
     this.log(deviceStatusHelper("QEMU Agent", swapper?.data?.agent === 1 ? chalk.green("enabled") : chalk.red("disabled")));
     this.log(`${generateSpacingPrefix(1, true)} ${chalk.bold("Device Configuration")}`);
-    swapper?.data?.swapper?.devices?.forEach((device: Record<string, any>) => {
-      // check if this device is the last in the array
-      const isLast = swapper?.data?.swapper?.devices?.length === swapper?.data?.swapper?.devices?.indexOf(device) + 1;
+
+    for (const device of swapper?.data?.swapper?.devices || []) {
+      const isLast = swapper?.data?.swapper?.devices?.length === (swapper?.data?.swapper?.devices?.indexOf(device) || 0) + 1;
 
       this.log(deviceStatusHelper(`Device ${device?.as} (${device?.value})`, device?.connectedToHost ? chalk.green("connected") : chalk.red("disconnected"), { isLast, level: 2 }));
-    });
+    }
 
     this.log("\n" + chalk.gray(`To view commands related to the active QM, run ${chalk.bold(`${this.config.bin} ${this.id} --help`)}`));
   }
