@@ -3,10 +3,11 @@ import ky from "ky";
 type ResultType<T extends boolean> = T extends true ? Record<string, any> : SwapperMachineManager[];
 
 export class SwapperClient {
+  active: SwapperActiveManager;
   host: URL;
   prefix: string;
   secret: string;
-  active: SwapperActiveManager;
+
   constructor({ hostURL, secret }: { hostURL: string; secret: string }) {
     this.host = new URL(hostURL);
     this.prefix = `${this.host.protocol}//${this.host.host}`;
@@ -29,6 +30,7 @@ export class SwapperClient {
 
 export class SwapperActiveManager {
   swapper: SwapperClient;
+
   constructor(swapper: SwapperClient) {
     this.swapper = swapper;
   }
@@ -41,16 +43,16 @@ export class SwapperActiveManager {
     }).json();
   }
 
-  async syncDevices(): Promise<Record<string, any>> {
-    return ky.post(`${this.swapper.prefix}/api/v1/active/sync`, {
+  async stop(): Promise<Record<string, any>> {
+    return ky.post(`${this.swapper.prefix}/api/v1/active/stop`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
     }).json();
   };
 
-  async stop(): Promise<Record<string, any>> {
-    return ky.post(`${this.swapper.prefix}/api/v1/active/stop`, {
+  async syncDevices(): Promise<Record<string, any>> {
+    return ky.post(`${this.swapper.prefix}/api/v1/active/sync`, {
       headers: {
         "Authorization": `Bearer ${this.swapper.secret}`
       }
@@ -59,10 +61,11 @@ export class SwapperActiveManager {
 }
 
 export class SwapperMachineManager {
-  swapper: SwapperClient;
-  id: string;
   friendlyName?: string;
+  id: string;
   status?: string;
+  swapper: SwapperClient;
+
   constructor(swapper: SwapperClient, id: string, friendlyName?: string, status?: string) {
     this.swapper = swapper;
     this.id = id;

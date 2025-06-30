@@ -1,19 +1,17 @@
-import { Args, Command, Flags } from '@oclif/core'
-import { ExtendedCommand, Flags as ExtendedFlags } from '../../lib/oclif/Base.js'
 import chalk from 'chalk';
-import { deviceStatusHelper, generateSpacingPrefix } from '../../lib/oclif/helpers.js';
 import cj from "color-json"
 
+import { ExtendedCommand } from '../../lib/oclif/base.js'
+import { deviceStatusHelper, generateSpacingPrefix } from '../../lib/oclif/helpers.js';
+
 export default class ActiveSync extends ExtendedCommand<typeof ActiveSync> {
-  override internalFlags = {
-    exposeAccess: true,
-  };
-
   static override description = 'Sync devices to the active QM'
-
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
   ]
+  override internalFlags = {
+    exposeAccess: true,
+  };
 
   public async run(): Promise<void> {
     const swapper = await this.commandTools.swapper?.active.overview;
@@ -23,13 +21,15 @@ export default class ActiveSync extends ExtendedCommand<typeof ActiveSync> {
       this.toErrorJson(job);
       this.error(cj(job || {}));
       return;
-    };
+    }
+
+    ;
 
     if (this.jsonEnabled()) return this.toSuccessJson(job);
 
     this.log(chalk.bold(`Active QM ${chalk.blue(`${swapper?.data?.id} (${swapper?.data?.name})`)}`));
     this.log(deviceStatusHelper("Status", swapper?.data?.status === "running" ? chalk.green("running") : chalk.red(swapper?.data?.status)));
     this.log(`${generateSpacingPrefix(1, true)} ${chalk.bold("Jobs")}`);
-    this.log(deviceStatusHelper("Device Sync", chalk.magenta("queued"), { level: 2, isLast: true }));
+    this.log(deviceStatusHelper("Device Sync", chalk.magenta("queued"), { isLast: true, level: 2 }));
   }
 }

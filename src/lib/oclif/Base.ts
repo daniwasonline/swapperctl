@@ -1,4 +1,5 @@
 import { Command, Flags, Interfaces } from "@oclif/core";
+
 import { SwapperClient } from "../swapper.js";
 
 export interface InternalCommandFlags {
@@ -9,44 +10,42 @@ export interface CommandTools {
   swapper?: SwapperClient;
 };
 
-export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof ExtendedCommand['baseFlags'] & T['flags']>
+export type Flags<T extends typeof Command> = Interfaces.InferredFlags<T['flags'] & typeof ExtendedCommand['baseFlags']>
 export type Args<T extends typeof Command> = Interfaces.InferredArgs<T['args']>
 
 
 export abstract class ExtendedCommand<T extends typeof Command> extends Command {
-  static enableJsonFlag = true;
-
-  protected internalFlags!: InternalCommandFlags;
-  protected commandTools!: CommandTools;
-  protected flags!: Flags<T>
-  protected args!: Args<T>
-
   static baseFlags = {
-    "api-url": Flags.string({
-      description: "The URL of the Swapper API server",
-      helpGroup: "Swapper API",
-      env: "SWAPPERCTL_API_URL"
-    }),
     "api-secret": Flags.string({
       description: "The API secret for the Swapper API server",
-      helpGroup: "Swapper API",
-      env: "SWAPPERCTL_API_SECRET"
+      env: "SWAPPERCTL_API_SECRET",
+      helpGroup: "Swapper API"
+    }),
+    "api-url": Flags.string({
+      description: "The URL of the Swapper API server",
+      env: "SWAPPERCTL_API_URL",
+      helpGroup: "Swapper API"
     }),
     "json": Flags.boolean({
+      default: false,
       description: "Output in JSON format",
       helpGroup: "Output",
-      default: false,
     }),
   }
+  static enableJsonFlag = true;
+  protected args!: Args<T>
+  protected commandTools!: CommandTools;
+  protected flags!: Flags<T>
+  protected internalFlags!: InternalCommandFlags;
 
 
   public async init(): Promise<void> {
     await super.init();
 
     const { args, flags } = await this.parse({
-      flags: this.ctor.flags,
-      baseFlags: (super.ctor as typeof ExtendedCommand).baseFlags,
       args: this.ctor.args,
+      baseFlags: (super.ctor as typeof ExtendedCommand).baseFlags,
+      flags: this.ctor.flags,
       strict: this.ctor.strict,
     });
 
@@ -57,7 +56,9 @@ export abstract class ExtendedCommand<T extends typeof Command> extends Command 
         throw new Error("Missing Swapper access token (configure using process.env.SWAPPERCTL_API_SECRET or --api-secret)");
       } else if (!this.flags?.["api-url"]) {
         throw new Error("Missing API URL (configure using process.env.SWAPPERCTL_API_URL or --api-url)");
-      };
+      }
+
+      ;
 
       this.commandTools = {
         swapper: new SwapperClient({
@@ -65,6 +66,8 @@ export abstract class ExtendedCommand<T extends typeof Command> extends Command 
           secret: this.flags["api-secret"]
         })
       }
-    };
+    }
+
+    ;
   }
 }

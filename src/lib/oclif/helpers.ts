@@ -6,7 +6,7 @@ export const generateSpacingPrefix = (level: number, final?: boolean) => {
   return chalk.gray(`${preSpaces}${markerChar}`);
 };
 
-export const deviceStatusHelper = (key: string, value: string, options = { level: 1, isLast: false }) => {
+export const deviceStatusHelper = (key: string, value: string, options = { isLast: false, level: 1 }) => {
   const prefix = generateSpacingPrefix(options.level, options.isLast);
   return `${prefix} ${chalk.bold(key)}: ${chalk.gray(value)}`;
 };
