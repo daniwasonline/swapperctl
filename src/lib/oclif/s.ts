@@ -11,7 +11,7 @@ export interface CommandTools {
 };
 
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<T['flags'] & typeof ExtendedCommand['baseFlags']>
-export type Args<T extends typeof Command> = Interfaces.InferredArgs<T['args']>
+export type Args<T extends typeof Command> = Interfaces.InferredArgs<T['args']>;
 
 
 export abstract class ExtendedCommand<T extends typeof Command> extends Command {
